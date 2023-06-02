@@ -1,0 +1,12 @@
+.ip-ctrl label {
+    font-size: 0.8rem!important;
+}
+.oe-inputs {
+    width: 100%;
+}
+.oe-table {
+    table-layout: fixed;
+}
+.oe-td {
+    width: 80%;
+}
