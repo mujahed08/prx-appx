@@ -1,21 +1,19 @@
 <template>
     <div class="ip-ctrl col-3 d-flex flex-column p-1 select">
         <label for="name-n">{{ props.label }}</label>
-        <input type="text" name="name-n" id="name-n" :placeholder="[[ props.placholder ]]" />
-        <div class="selections p-1 border shadow">
+        <input type="text" :value="selected.value" name="name-n" id="name-n" :placeholder="[[ props.placholder ]]" @focus="hideOptions = false" @blur="onBlur(ev)" />
+        <div class="selections p-1 border shadow" :class="{'hide-options' : hideOptions}">
             <ul>
                 <li v-for="item in list" ><a @click="selectItem($event, item)">{{ item.name }}</a></li>
-                <li><a>Item 2</a></li>
-                <li><a>Item 3</a></li>
             </ul>
         </div>
     </div>
 </template>
 
 <script setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
-
+    const hideOptions = ref(true)
     const props = defineProps({
         label: {
             type : String,
@@ -27,8 +25,13 @@ import { onMounted, reactive } from 'vue';
         },
         placholder: {
             type : String
+        },
+        selected : {
+            type : Object
         }
     })
+
+    const emit = defineEmits('update:selected')
 
     const list = reactive([])
     const setList = (data) => {
@@ -43,7 +46,20 @@ import { onMounted, reactive } from 'vue';
 
     const selectItem = ($event, item) => {
         console.log(item)
+        selected.value = item.name
+        selected.id = item._id
+        emit('update:selected', selected)
     }
+
+    const onBlur = ($event) => {
+        setTimeout(()=> {
+            hideOptions.value = true
+        }, 300)
+    }
+
+    const selected = reactive({
+        value : ''
+    })
 </script>
 <style>
 .select {
@@ -57,7 +73,7 @@ import { onMounted, reactive } from 'vue';
     width: 100%;
     background-color: white;
     z-index: 1;
-    max-height: 250px;
+    max-height: 150px;
     overflow-y: scroll;
 }
 .selections ul {
@@ -73,4 +89,7 @@ import { onMounted, reactive } from 'vue';
     background-color: #ccc;
 }
 
+.hide-options {
+    display: none;
+}
 </style>

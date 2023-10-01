@@ -137,9 +137,10 @@
                     </div>
                     <div class="col-12 pt-3">
                         <div class="d-flex flex-wrap">
-                            <Select label="Medicine" :listApi=fetchMedicineList placholder="Tab."></Select>
+                            <Select v-model:selected="state.selectedMedicine" label="Medicine" :listApi=fetchMedicineList placholder="Tab."></Select>
                         </div>
                     </div>
+                    <button @click="logState" class="btn btn-primary">Test</button>
                 </div>
                 <div class="col-4 my-1 ps-3">
                     <div class="col">
@@ -155,6 +156,7 @@
 </template>
 
 <script setup>
+import { reactive, watch } from 'vue';
 import Select from '../components/Select.vue';
 import useMedicineStore from '../stores/medicine';
 
@@ -162,4 +164,20 @@ import useMedicineStore from '../stores/medicine';
     const medicineStore  = useMedicineStore()
     const {fetchMedicineList} = medicineStore
 
+    const state = reactive({
+        selectedMedicine: {
+            name : ''
+        }
+    })
+
+    watch(state, (newState, oldState) => {
+            const stet = {...newState}
+            console.log(stet.selectedMedicine.value)
+            console.log(oldState.selectedMedicine?.id)
+        }
+    )
+
+    const logState = (ev) => {
+        console.log(state)
+    }
 </script>
